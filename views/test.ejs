@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript" src="socket.io/socket.io.js"></script>
+	<script type="text/javascript">
+		var socket=io("http://localhost:8080");
+		$(function(){
+			$('#clientA').click(function(){
+				socket.emit('client_a_send','Hello b');
+				return false;
+			});
+			/*socket.on('server_send_all_client',function(data){
+				$("#getData").append(data+', ');
+			})*/
+			/*socket.on('server_send_one_client',function(data){
+				$("#getData").append(data+', ');
+			})*/
+			socket.on('server_send_other_client',function(data){
+				$("#getData").append(data+', ');
+			})
+		})
+	</script>
+</head>
+<body>
+<div id="clientA">Send hello b</div>
+<h2 id="getData"></h2>
+</body>
+</html>
