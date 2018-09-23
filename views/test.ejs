@@ -7,24 +7,32 @@
 	<script type="text/javascript">
 		var socket=io("http://localhost:8080");
 		$(function(){
-			$('#clientA').click(function(){
-				socket.emit('client_a_send','Hello b');
-				return false;
+			$("#do").click(function(){
+				socket.emit('client_send_color','red');
 			});
-			/*socket.on('server_send_all_client',function(data){
-				$("#getData").append(data+', ');
-			})*/
-			/*socket.on('server_send_one_client',function(data){
-				$("#getData").append(data+', ');
-			})*/
-			socket.on('server_send_other_client',function(data){
-				$("#getData").append(data+', ');
-			})
+			$("#xanh").click(function(){
+				socket.emit('client_send_color','green');
+			});
+			$("#vang").click(function(){
+				socket.emit('client_send_color','yellow');
+			});
 		})
+
+		socket.on('server_send_color',function(data){
+			$("body").css('background-color',data);
+		});
+		
 	</script>
+	<style type="text/css">
+		#do,#xanh,#vang{width:300px;height:150px;}
+		#do{background-color: red}
+		#xanh{background-color: green}
+		#vang{background-color: yellow}
+	</style>
 </head>
 <body>
-<div id="clientA">Send hello b</div>
-<h2 id="getData"></h2>
+<div id="do"></div>
+<div id="xanh"></div>
+<div id="vang"></div>
 </body>
 </html>

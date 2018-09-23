@@ -46,10 +46,7 @@ io.on('connection',function(socket){
 	socket.on('disconnect',function(){
 		console.log(socket.id + "ngat ket noi");
 	})
-	socket.on('client_a_send',function(data){
-		console.log(socket.id + " gui tin " + data);
-		//io.sockets.emit('server_send_all_client',data);//send toan bo
-		//socket.emit('server_send_one_client',data);//send chi thang gui
-		socket.broadcast.emit('server_send_other_client',data);//send thang khac khong phai thang gui
-	});
+	socket.on('client_send_color',function(data){
+		io.sockets.emit('server_send_color',data);
+	})
 });
