@@ -4,7 +4,7 @@ const app = express()
 
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-server.listen(8080, () => console.log('Example app listening on port 8080!'))
+server.listen(8000, () => console.log('Example app listening on port 8000!'))
 app.set('view engine', 'ejs');
 
 app.use(express.static('public'));
@@ -41,7 +41,7 @@ app.post('/api/users', function(req, res) {
     var age = req.body.age;
     res.send(name + ' ' + age);
 });
-var arrUser=['hai'];
+var arrUser=[];
 
 io.on('connection',function(socket){
 	console.log('co nguoi ket noi voi id la : ' + socket.id);
@@ -55,7 +55,18 @@ io.on('connection',function(socket){
         }else {
             //username chua ton tai
             arrUser.push(username);
+            socket.Username=username;
             socket.emit('server_send_register_name_success',username);
+            io.sockets.emit('server_send_list_user_online',arrUser);
         }
-	})
+	});
+    socket.on('client_send_logout',function(){
+        arrUser.splice(arrUser.indexOf(socket.Username),1);
+        socket.broadcast.emit('server_send_list_user_online',arrUser);
+    });
+
+    socket.on('clien_send_message',function(data){
+        var messages={username:socket.Username,content:data};
+        io.sockets.emit('server_send_message',messages);
+    })
 });
