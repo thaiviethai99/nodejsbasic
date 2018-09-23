@@ -11,7 +11,8 @@ app.use(express.static('public'));
 
 app.get('/', (req, res) => {
     // res.sendFile(__dirname + '/public/a.html');
-    res.render('test');
+    //res.render('test');
+    res.render('chat');
 });
 // for parsing application/json
 app.use(bodyParser.json());
@@ -40,13 +41,21 @@ app.post('/api/users', function(req, res) {
     var age = req.body.age;
     res.send(name + ' ' + age);
 });
+var arrUser=['hai'];
 
 io.on('connection',function(socket){
 	console.log('co nguoi ket noi voi id la : ' + socket.id);
 	socket.on('disconnect',function(){
 		console.log(socket.id + "ngat ket noi");
 	})
-	socket.on('client_send_color',function(data){
-		io.sockets.emit('server_send_color',data);
+	socket.on('client_send_register_name',function(username){
+        if(arrUser.indexOf(username)>=0){
+            //username da ton tai
+            socket.emit('server_register_name_failed');
+        }else {
+            //username chua ton tai
+            arrUser.push(username);
+            socket.emit('server_send_register_name_success',username);
+        }
 	})
 });
