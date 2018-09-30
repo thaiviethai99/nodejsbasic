@@ -100,3 +100,6 @@ app.get('/tinh/:pheptinh/:soa/:sob', function(req, res){
   var pt = new PhepTinh(pheptinh, soa, sob);
   res.send(pt.getOutput());
 });
+
+app.get('/list', require('./controller/list.js'));
+app.get('/listperson', require('./controller/listperson.js'));
