@@ -6,7 +6,15 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
 var mysql = require('mysql'); // include thêm module mysql
-
+// for parsing application/json
+app.use(bodyParser.json());
+// for parsing application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({
+    extended: true
+})); // support encoded bodies
+app.use(require('./controller/midleware.js'));
+// for parsing multipart/form-data
+//app.use(multer());
 var PhepTinh=require('./model/PhepTinh');
 
 // Tạo kết nối với Database
@@ -27,15 +35,7 @@ app.get('/', (req, res) => {
     //res.render('test');
     res.render('chat');
 });
-// for parsing application/json
-app.use(bodyParser.json());
-// for parsing application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({
-    extended: true
-})); // support encoded bodies
 
-// for parsing multipart/form-data
-//app.use(multer());
 
 //app.get('/', (req, res) => res.send('Hello World dsfda!'))
 app.get('/test', function(req, res) {
