@@ -1,3 +1,15 @@
+/*var baseURL               = getBaseURL(); // Call function to determine it
+var socketIOPort          = 8080;
+var socketIOLocation      = baseURL + socketIOPort; // Build Socket.IO location
+var socket                = io.connect(socketIOLocation);
+
+// Build the user-specific path to the socket.io server, so it works both on 'localhost' and a 'real domain'
+function getBaseURL()
+{
+    baseURL = location.protocol + "//" + location.hostname + ":" + location.port;
+    return baseURL;
+}*/
+
 var socket = io("http://localhost:8000");
 socket.on('server_register_name_failed', function() {
     alert("Username da ton tai,vui long chon username khac");

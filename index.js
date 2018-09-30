@@ -4,6 +4,19 @@ const app = express()
 
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+
+var mysql = require('mysql'); // include thêm module mysql
+
+var PhepTinh=require('./model/PhepTinh');
+
+// Tạo kết nối với Database
+var pool = mysql.createPool({
+host: 'localhost',
+user: 'root',
+password: null,
+database: 'realtime'
+});
+
 server.listen(8000, () => console.log('Example app listening on port 8000!'))
 app.set('view engine', 'ejs');
 
@@ -69,4 +82,21 @@ io.on('connection',function(socket){
         var messages={username:socket.Username,content:data};
         io.sockets.emit('server_send_message',messages);
     })
+});
+
+app.get('/user', function(req, res){
+    // Viết câu truy vấn sql
+    var sql = 'SELECT * FROM `users`';// Thực hiện câu truy vấn và show dữ liệu
+    pool.query(sql, function(error, result){
+        if (error) throw error;
+        console.log('– USER TABLE — ' , result);
+        res.json(result); // Trả kết quả về cho client dưới dạng json
+    });
+});
+
+
+app.get('/tinh/:pheptinh/:soa/:sob', function(req, res){
+  var {pheptinh, soa, sob} = req.params;
+  var pt = new PhepTinh(pheptinh, soa, sob);
+  res.send(pt.getOutput());
 });
